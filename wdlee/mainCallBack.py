@@ -6,22 +6,6 @@ import matplotlib.pyplot as plt
 
 print(tf.__version__)
 
-def readData(inData):
-    outData = pd.read_csv(inData)
-    return outData
-
-dfData = readData("../data/datasets_1379_2485_housing.csv")
-
-#print(dfData)
-dfRm = dfData['RM']
-#print(dfRm)
-#dfRm.plot.hist(bins=10,alpha=0.5)
-
-dataK = tf.keras.datasets.boston_housing.load_data(path="boston_housing.npz", test_split=0.2, seed=113)
-dataK = pd.DataFrame(dataK)
-#print(dataK)
-
-
 (trainX, trainY), (testX, testY) = boston_housing.load_data()
 
 print(len(trainX))
@@ -61,7 +45,7 @@ model = tf.keras.Sequential([
 model.compile(optimizer = tf.keras.optimizers.Adam(lr=0.07), loss='mse')
 model.summary()
 
-history = model.fit(trainX,trainY, epochs=300, batch_size=32,validation_split=0.25)
+history = model.fit(trainX,trainY, epochs=300, batch_size=32,validation_split=0.25, callbacks=[tf.keras.callbacks.EarlyStopping(patience=3,monitor='val_loss')])
 
 
 #plt.plot(history.history['loss'], 'b-', label='loss')
